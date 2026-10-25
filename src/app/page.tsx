@@ -33,6 +33,7 @@ export default function Home() {
   const [status, setStatus] = useState<string>(FETCH_STATUS.IDLE);
 
   const [pin, setPin] = useState<string>("");
+  const [project, setProject] = useState<string>("1");
 
   const handleAuth = async (e: FormEvent) => {
     e.preventDefault();
@@ -47,7 +48,7 @@ export default function Home() {
 
     const redirectUri = `${location.origin}/callback`;
 
-    const url = await getGoogleAuthUrl(pin, redirectUri);
+    const url = await getGoogleAuthUrl(pin, redirectUri, project);
     router.push(url);
   };
 
@@ -118,6 +119,24 @@ export default function Home() {
                     />
                   </InputOTPGroup>
                 </InputOTP>
+              </div>
+
+              <div className="grid gap-2">
+                <label
+                  htmlFor="project"
+                  className="text-sm text-muted-foreground"
+                >
+                  Google project
+                </label>
+                <select
+                  id="project"
+                  value={project}
+                  onChange={(e) => setProject(e.target.value)}
+                  className="h-10 rounded-md border bg-white px-3 text-sm"
+                >
+                  <option value="1">Account 1</option>
+                  <option value="2">Account 2</option>
+                </select>
               </div>
             </CardContent>
             <CardFooter>
