@@ -1,20 +1,18 @@
 "use server";
 
+import { getProject } from "@/lib/google-projects";
+
 export async function getGoogleAuthUrl(
   pin: string,
   redirectUri: string,
-  clientId?: string,
-  clientSecret?: string
+  project?: string
 ) {
+  const selected = getProject(project);
   const params = new URLSearchParams();
-  const state = clientId ? `${pin}|${clientId}|${clientSecret}` : pin;
 
-  params.append(
-    "client_id",
-    clientId ?? (process.env.GOOGLE_CLIENT_ID as string)
-  );
+  params.append("client_id", selected.id);
   params.append("redirect_uri", redirectUri);
-  params.append("state", state);
+  params.append("state", `${pin}|${selected.key}`);
   params.append("response_type", "code");
   params.append(
     "scope",
